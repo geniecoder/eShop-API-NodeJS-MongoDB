@@ -21,3 +21,5 @@ Thumbs.db
 # Cache and temporary files
 .cache/
 .temp/
+
+steps.js

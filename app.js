@@ -1,3 +1,4 @@
+require("dotenv/config");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -13,7 +14,7 @@ app.use(morgan("tiny"));
 
 
 
-require("dotenv/config");
+
 
 const api = process.env.API_URL;
 
