@@ -1,4 +1,4 @@
-const Category = require('../models/category');
+const Category = require("../models/category");
 
 const CategoryController = {
   getAllCategories: async (req, res) => {
@@ -13,7 +13,7 @@ const CategoryController = {
   getCategoryById: async (req, res) => {
     try {
       const category = await Category.findById(req.params.id);
-      if (!category) throw Error('Category not found');
+      if (!category) throw Error("Category not found");
       res.json(category);
     } catch (error) {
       res.status(404).json({ message: error.message });
@@ -21,10 +21,25 @@ const CategoryController = {
   },
 
   createCategory: async (req, res) => {
-    const category = new Category(req.body);
+    const { name, description, parent_category:parentCategoryId } = req.body;
     try {
-      const newCategory = await category.save();
-      res.status(201).json(newCategory);
+      // Check if the parent category exists (if provided)
+      if (parentCategoryId) {
+        const parentCategory = await Category.findById(parentCategoryId);
+        if (!parentCategory) {
+          return res.status(404).json({ message: "Parent category not found" });
+        }
+      }
+
+      // Create the new category
+      const category = new Category({
+        name,
+        description,
+        parent_category: parentCategoryId || null,
+      });
+
+      await category.save();
+      res.status(201).json(category);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -37,7 +52,7 @@ const CategoryController = {
         req.body,
         { new: true }
       );
-      if (!updatedCategory) throw Error('Category not found');
+      if (!updatedCategory) throw Error("Category not found");
       res.json(updatedCategory);
     } catch (error) {
       res.status(404).json({ message: error.message });
@@ -47,12 +62,12 @@ const CategoryController = {
   deleteCategory: async (req, res) => {
     try {
       const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-      if (!deletedCategory) throw Error('Category not found');
+      if (!deletedCategory) throw Error("Category not found");
       res.json(deletedCategory);
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
-  }
+  },
 };
 
 module.exports = CategoryController;

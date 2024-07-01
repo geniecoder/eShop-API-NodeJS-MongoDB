@@ -16,7 +16,7 @@ const transactionsRouter = require('./transactions');
 // Define routes for each entity
 router.use('/user', usersRouter);
 router.use('/products', productsRouter);
-router.use('/categories', categoriesRouter);
+router.use('/category', categoriesRouter);
 router.use('/orders', ordersRouter);
 router.use('/reviews', reviewsRouter);
 router.use('/carts', cartsRouter);
